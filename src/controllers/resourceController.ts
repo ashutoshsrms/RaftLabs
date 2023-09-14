@@ -31,7 +31,7 @@ export const getAllResources = async (req: Request, res: Response) => {
     }
     const resources = await Resource.find();
     cache.set(CACHE_KEY, resources, 60);
-    res.json(resources);
+    res.status(200).json(resources);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
@@ -46,7 +46,7 @@ export const getResourceById = async (req: Request, res: Response) => {
     if (!resource) {
       return res.status(404).json({ message: 'Resource not found' });
     }
-    res.json(resource);
+    res.status(200).json(resource);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
@@ -67,7 +67,7 @@ export const updateResourceById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Resource not found' });
     }
 
-    res.json(updatedResource);
+    res.status(200).json(updatedResource);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
@@ -84,7 +84,7 @@ export const deleteResourceById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Resource not found' });
     }
 
-    res.json({ message: 'Resource deleted successfully' });
+    res.status(200).json({ message: 'Resource deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
