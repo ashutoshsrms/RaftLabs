@@ -7,6 +7,7 @@ export interface ResourceDocument extends Document {
   category: string;
   price: number;
   quantity: number;
+  createdAt: Date;
 }
 
 const resourceSchema: Schema<ResourceDocument> = new Schema({
@@ -15,6 +16,7 @@ const resourceSchema: Schema<ResourceDocument> = new Schema({
   category: { type: String, required: true },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
+  createdAt: {type:Date, default: Date.now}
 });
 
 export default mongoose.model<ResourceDocument>('Resource', resourceSchema);

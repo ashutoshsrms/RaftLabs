@@ -23,3 +23,7 @@ export const authMiddleware = (
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
+
+export const generateToken = (userId: string): string => {
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' }); // Adjust expiration as needed
+};

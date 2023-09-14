@@ -5,18 +5,18 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 // import authRoutes from './routes/authRoutes';
 import resourceRoutes from './routes/resourceRoutes';
-import { MONGODB_URI , PORT,BASE_API} from './config';
+import authRoutes from './routes/authRoutes';
+import { MONGODB_URI , PORT,BASE_API,} from './config';
+
 
 const app: Express = express();
-
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-// app.use('/auth', authRoutes);
-console.log(BASE_API)
+app.use(`${BASE_API}/auth`, authRoutes);
 app.use(`${BASE_API}/resources`, resourceRoutes);
 
 // Error handling middleware
