@@ -36,7 +36,6 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'User not found' });
       }
   
-      // Compare the provided password with the hashed password using bcrypt
       const isPasswordValid = await bcrypt.compare(password, user.password);
   
       if (!isPasswordValid) {
@@ -51,8 +50,11 @@ export const loginUser = async (req: Request, res: Response) => {
     }
   };
   
-  // Logout user
-  export const logoutUser = (req: Request, res: Response) => {
-    // You can implement logout logic here if needed
-    res.json({ message: 'Logout successful' });
-  };
+
+export const logoutUser = (req: Request, res: Response) => {
+  try {
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token. Unauthorized.' });
+  }
+};

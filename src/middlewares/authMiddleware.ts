@@ -1,14 +1,13 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET} from '../config';
+import { JWT_SECRET } from '../config';
 
 export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // Check if a JWT token is provided in the request headers
+
   const token = req.header('x-auth-token');
 
   if (!token) {
@@ -25,5 +24,5 @@ export const authMiddleware = (
 };
 
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' }); // Adjust expiration as needed
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' }); 
 };

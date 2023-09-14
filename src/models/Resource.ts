@@ -1,4 +1,4 @@
-// src/models/Resource.ts
+
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ResourceDocument extends Document {

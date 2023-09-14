@@ -1,16 +1,21 @@
 import { Request, Response } from 'express';
 import Resource, { ResourceDocument } from '../models/Resource';
 import {CACHE_KEY} from '../config'
-
+import {io} from '../app';
 import NodeCache from 'node-cache';
 const cache = new NodeCache();
 
 
-// Create a new resource
 export const createResource = async (req: Request, res: Response) => {
   try {
     const newResource: ResourceDocument = new Resource(req.body);
     await newResource.save();
+
+    // Emit a WebSocket event to notify clients about the new resource
+    if (io) {
+      io.emit('newResource', newResource);
+    }
+
     res.status(201).json(newResource);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -22,7 +27,6 @@ export const getAllResources = async (req: Request, res: Response) => {
   try {
     const cachedResources: ResourceDocument[] | undefined = cache.get(CACHE_KEY);
     if (cachedResources) {
-      // If cached data exists, return it
       return res.status(200).json({ resources: cachedResources });
     }
     const resources = await Resource.find();
@@ -97,21 +101,17 @@ export const getPaginatedAndSortedResources = async (req: Request, res: Response
       return res.status(400).json({ message: 'Invalid query parameters' });
     }
 
-    // Calculate skip value
     const skip = (pageNumber - 1) * limit;
 
-    // Construct sorting object
     const sortOptions: { [key: string]: 'asc' | 'desc' } = {};
     sortOptions[sortBy as string] = sortOrder as 'asc' | 'desc';
 
-    // Query the database to get paginated and sorted resources
     const resources: ResourceDocument[] = await Resource.find()
       .skip(skip)
       .limit(limit)
       .sort(sortOptions)
       .exec();
 
-    // Calculate the total count of resources
     const totalCount: number = await Resource.countDocuments();
 
     res.status(200).json({ resources, totalCount });
